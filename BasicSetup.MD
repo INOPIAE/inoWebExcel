@@ -107,7 +107,7 @@
 
 # Add translation
 
-1. Install vue-i18n@9
+1. Install `vue-i18n@9`
     ```shell
     npm install vue-i18n@9
     ```
@@ -180,7 +180,7 @@
 })
     ```
 
-1. Adjust  `webpack.config.js`
+1. Adjust `webpack.config.js`
     ```js
     module.exports = {
         // ...
@@ -198,7 +198,7 @@
     }
     ```
 
-1. Adjust  `tsconfig.json`
+1. Adjust `tsconfig.json`
     ```json
     {
     "compilerOptions": {
@@ -207,6 +207,66 @@
     }
     }
     ```
+
+# Add Vuetify
+1. Install needed packages
+    ```shell
+    npm install vuetify@next
+    npm install @mdi/font sass
+    npm install --save-dev style-loader css-loader
+    ```
+
+1. Register in `taskpane.ts`
+    ```ts
+    import { createApp } from 'vue';
+    import Taskpane from './taskpane.vue';
+    import { i18n } from '../i18n/i18n'
+
+    import 'vuetify/styles'
+    import { createVuetify } from 'vuetify'
+    import * as components from 'vuetify/components'
+    import * as directives from 'vuetify/directives'
+
+    import '@mdi/font/css/materialdesignicons.css'
+
+    const vuetify = createVuetify({
+        components,
+        directives,
+    })
+
+    createApp(Taskpane)
+        .use(i18n)
+        .use(vuetify)
+        .mount('#app');
+    ```
+
+1. Use in template and onMounted() in `taskpane.vue`
+    ```vue
+    <v-btn @click="run">{{ $t("button") }}>run</v-btn>
+    ```
+
+1. Adjust `webpack.config.js`
+    ```js
+    module.exports = {
+    // ...
+    module: {
+        rules: [
+        {
+            test: /\.css$/i,
+            use: ['style-loader', 'css-loader'],
+        },
+        {
+            test: /\.(woff(2)?|ttf|eot|svg)$/i,
+            type: 'asset/resource',
+            generator: {
+            filename: 'fonts/[name][ext]',
+            },
+        },
+        ],
+    },
+}
+    ```
+
 # Change `manifest.xml`
 
 TBD
