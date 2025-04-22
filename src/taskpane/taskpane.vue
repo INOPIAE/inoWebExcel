@@ -1,7 +1,7 @@
 <template>
     <div>
       <p v-if="!officeReady">{{ $t("msgOfficeInit") }}</p>
-      <button :disabled="!officeReady" @click="setFocusA1">{{ $t("btnSetFocus") }}</button>
+      <v-btn :disabled="!officeReady" @click="setFocusA1">{{ $t("btnSetFocus") }}</v-btn>
     </div>
 </template>
   
