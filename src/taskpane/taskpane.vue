@@ -1,24 +1,29 @@
 <template>
     <div>
-      <p v-if="!officeReady">Office wird initialisiert...</p>
-      <button :disabled="!officeReady" @click="setFocusA1">Set focus to A1</button>
+      <p v-if="!officeReady">{{ $t("msgOfficeInit") }}</p>
+      <button :disabled="!officeReady" @click="setFocusA1">{{ $t("btnSetFocus") }}</button>
     </div>
-  </template>
+</template>
   
-  <script setup>
+<script setup>
   import { ref, onMounted } from 'vue'
   
   const officeReady = ref(false)
   
+  const officeLanguage = ref('')
+
   onMounted(() => {
     if (window.Office) {
-        Office.onReady().then(() => {
+      Office.onReady().then(() => {
         officeReady.value = true
-        })
+
+        officeLanguage.value = Office.context.displayLanguage || 'unknown'
+        console.log("📘 Office-Sprache:", officeLanguage.value)
+      })
     } else {
-        console.error("❌ Office.js wurde nicht geladen.")
+      console.error("❌ Office.js wurde nicht geladen.")
     }
-  })
+})
   
   function setFocusA1() {
 

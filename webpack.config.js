@@ -25,7 +25,7 @@ module.exports = async (env, options) => {
       clean: true,
     },
     resolve: {
-      extensions: [".ts", ".html", ".js"],
+      extensions: [".ts", ".html", ".js", ".vue", ".json"],
     },
     module: {
       rules: [
@@ -51,6 +51,10 @@ module.exports = async (env, options) => {
           generator: {
             filename: "assets/[name][ext][query]",
           },
+        },
+        {
+          test: /\.json$/,
+          type: 'json'
         },
       ],
     },
