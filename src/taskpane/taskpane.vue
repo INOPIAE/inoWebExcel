@@ -2,6 +2,7 @@
     <div>
       <p v-if="!officeReady">{{ $t("msgOfficeInit") }}</p>
       <v-btn :disabled="!officeReady" @click="setFocusA1">{{ $t("btnSetFocus") }}</v-btn>
+      <v-btn :disabled="!officeReady" @click="selectLine">{{ $t("btnSelectLine") }}</v-btn>
     </div>
 </template>
   
@@ -53,6 +54,49 @@
 
       workbook.worksheets.getItem(activeSheet.name).activate();
 
+      await context.sync();
+    }).catch((error) => {
+      console.error("Excel.run Fehler:", error);
+    });
+  }
+
+  function selectLine() {
+
+    if (!officeReady.value) {
+      console.error("Office is not ready yet.")
+      return
+    }
+
+    Excel.run(async (context) => {
+      const workbook = context.workbook;
+      const selectedRange = workbook.getSelectedRange();
+      selectedRange.load("rowIndex");
+      await context.sync();
+
+      const rowIndex = selectedRange.rowIndex; 
+
+      const activeSheet = workbook.worksheets.getActiveWorksheet();
+      activeSheet.load("name");
+      await context.sync();
+
+      const sheets = workbook.worksheets;
+      sheets.load("items/name");
+      await context.sync();
+
+      for (let sheet of sheets.items) {
+          sheet.activate();
+
+          const sheetRange = sheet.getRangeByIndexes(rowIndex, 0, 1, 100);
+          sheetRange.getCell(rowIndex, 5).select();
+          await context.sync();
+
+          const sheetRange1 = sheet.getRangeByIndexes(rowIndex, 0, 1, 100);
+          sheetRange1.select();
+          await context.sync();
+      }
+
+      const originalSheet = workbook.worksheets.getItem(activeSheet.name);
+      originalSheet.activate();
       await context.sync();
     }).catch((error) => {
       console.error("Excel.run Fehler:", error);

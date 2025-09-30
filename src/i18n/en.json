@@ -1,4 +1,5 @@
 {
     "btnSetFocus": "Set Focus To A1",
+    "btnSelectLine": "Select Line On All Sheets",
     "msgOfficeInit": "Initialize Office ..."
 }
